@@ -1,0 +1,241 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        while (true)
+        {
+            Console.WriteLine("========================================");
+            Console.WriteLine("MENU - Ejercicios (1 al 10)");
+            Console.WriteLine("1) Suma de digitos (2 digitos)");
+            Console.WriteLine("2) Primo y negativo (2 digitos)");
+            Console.WriteLine("3) Ambos digitos primos (2 digitos)");
+            Console.WriteLine("4) Suma de dos numeros (2 digitos) es par");
+            Console.WriteLine("5) Posicion del mayor digito (3 digitos)");
+            Console.WriteLine("6) Un digito multiplo de otro (3 digitos)");
+            Console.WriteLine("7) Mayor de 3 numeros (solo 2 variables)");
+            Console.WriteLine("8) Capicua (5 digitos)");
+            Console.WriteLine("9) 2do digito = penultimo (4 digitos)");
+            Console.WriteLine("10) Diferencia <= 10: listar enteros entre menor y mayor");
+            Console.WriteLine("0) Salir");
+            Console.Write("Elige una opcion: ");
+
+            string opt = Console.ReadLine();
+            Console.WriteLine();
+
+            if (opt == "0") break;
+
+            switch (opt)
+            {
+                case "1": Ej1(); break;
+                case "2": Ej2(); break;
+                case "3": Ej3(); break;
+                case "4": Ej4(); break;
+                case "5": Ej5(); break;
+                case "6": Ej6(); break;
+                case "7": Ej7(); break;
+                case "8": Ej8(); break;
+                case "9": Ej9(); break;
+                case "10": Ej10(); break;
+                default:
+                    Console.WriteLine("Opcion invalida.");
+                    break;
+            }
+
+            Console.WriteLine();
+        }
+    }
+
+    // ---------- Helpers ----------
+    static bool IsPrime(int n)
+    {
+        if (n < 2) return false;
+        if (n == 2) return true;
+        if (n % 2 == 0) return false;
+        for (int i = 3; i * i <= n; i += 2)
+            if (n % i == 0) return false;
+        return true;
+    }
+
+    static int ReadInt(string msg)
+    {
+        while (true)
+        {
+            Console.Write(msg);
+            if (int.TryParse(Console.ReadLine(), out int v)) return v;
+            Console.WriteLine("Entrada invalida. Intenta de nuevo.");
+        }
+    }
+
+    static int ReadNDigitsInt(string msg, int digits)
+    {
+        int min = (int)Math.Pow(10, digits - 1);
+        int max = (int)Math.Pow(10, digits) - 1;
+
+        while (true)
+        {
+            int n = ReadInt(msg);
+            int abs = Math.Abs(n);
+            if (abs >= min && abs <= max) return n;
+            Console.WriteLine($"Debe ser un entero de {digits} digitos (ej: {min}..{max} o negativo).");
+        }
+    }
+
+    // ---------- 1 ----------
+    static void Ej1()
+    {
+        int n = ReadNDigitsInt("Leer entero de 2 digitos: ", 2);
+        int a = Math.Abs(n);
+        int d1 = a / 10;
+        int d2 = a % 10;
+        Console.WriteLine($"Suma de digitos: {d1} + {d2} = {d1 + d2}");
+    }
+
+    // ---------- 2 ----------
+    static void Ej2()
+    {
+        int n = ReadNDigitsInt("Leer entero de 2 digitos: ", 2);
+        bool esPrimo = IsPrime(Math.Abs(n)); // primo por valor absoluto
+        bool esNegativo = n < 0;
+
+        Console.WriteLine($"Es primo (|n|): {esPrimo}");
+        Console.WriteLine($"Es negativo: {esNegativo}");
+        Console.WriteLine($"Cumple ambas: {esPrimo && esNegativo}");
+    }
+
+    // ---------- 3 ----------
+    static void Ej3()
+    {
+        int n = ReadNDigitsInt("Leer entero de 2 digitos: ", 2);
+        int a = Math.Abs(n);
+        int d1 = a / 10;
+        int d2 = a % 10;
+
+        bool p1 = IsPrime(d1);
+        bool p2 = IsPrime(d2);
+
+        Console.WriteLine($"Digitos: {d1} y {d2}");
+        Console.WriteLine($"Ambos digitos son primos: {p1 && p2}");
+    }
+
+    // ---------- 4 ----------
+    static void Ej4()
+    {
+        int n1 = ReadNDigitsInt("Leer 1er entero de 2 digitos: ", 2);
+        int n2 = ReadNDigitsInt("Leer 2do entero de 2 digitos: ", 2);
+        int suma = n1 + n2;
+
+        Console.WriteLine($"Suma: {n1} + {n2} = {suma}");
+        Console.WriteLine($"La suma es par: {suma % 2 == 0}");
+    }
+
+    // ---------- 5 ----------
+    static void Ej5()
+    {
+        int n = ReadNDigitsInt("Leer entero de 3 digitos: ", 3);
+        int a = Math.Abs(n);
+
+        int c = a / 100;        // centenas
+        int d = (a / 10) % 10;  // decenas
+        int u = a % 10;         // unidades
+
+        int mayor = c;
+        int pos = 1; // 1=centenas, 2=decenas, 3=unidades
+
+        if (d > mayor) { mayor = d; pos = 2; }
+        if (u > mayor) { mayor = u; pos = 3; }
+
+        Console.WriteLine($"Digitos: {c} {d} {u}");
+        Console.WriteLine($"Mayor digito: {mayor}");
+        Console.WriteLine($"Posicion del mayor: {pos} (1=centenas, 2=decenas, 3=unidades)");
+    }
+
+    // ---------- 6 ----------
+    static void Ej6()
+    {
+        int n = ReadNDigitsInt("Leer entero de 3 digitos: ", 3);
+        int a = Math.Abs(n);
+
+        int c = a / 100;
+        int d = (a / 10) % 10;
+        int u = a % 10;
+
+        bool hayMultiplo =
+            (d != 0 && c % d == 0) || (u != 0 && c % u == 0) ||
+            (c != 0 && d % c == 0) || (u != 0 && d % u == 0) ||
+            (c != 0 && u % c == 0) || (d != 0 && u % d == 0);
+
+        Console.WriteLine($"Digitos: {c} {d} {u}");
+        Console.WriteLine($"¿Algún digito es multiplo de otro?: {hayMultiplo}");
+    }
+
+    // ---------- 7 ----------
+    static void Ej7()
+    {
+        int a = ReadInt("Leer primer entero: ");
+        int b = ReadInt("Leer segundo entero: ");
+        int c = ReadInt("Leer tercer entero: ");
+
+        // Solo 2 variables: usaremos a como "mayor" y b como auxiliar para comparar.
+        if (b > a) a = b;
+        if (c > a) a = c;
+
+        Console.WriteLine($"El mayor es: {a}");
+    }
+
+    // ---------- 8 ----------
+    static void Ej8()
+    {
+        int n = ReadNDigitsInt("Leer entero de 5 digitos: ", 5);
+        int a = Math.Abs(n);
+
+        int d1 = a / 10000;
+        int d2 = (a / 1000) % 10;
+        int d4 = (a / 10) % 10;
+        int d5 = a % 10;
+
+        bool capicua = (d1 == d5) && (d2 == d4);
+
+        Console.WriteLine($"Es capicua: {capicua}");
+    }
+
+    // ---------- 9 ----------
+    static void Ej9()
+    {
+        int n = ReadNDigitsInt("Leer entero de 4 digitos: ", 4);
+        int a = Math.Abs(n);
+
+        int segundo = (a / 100) % 10;
+        int penultimo = (a / 10) % 10;
+
+        Console.WriteLine($"Segundo digito: {segundo}");
+        Console.WriteLine($"Penultimo digito: {penultimo}");
+        Console.WriteLine($"Son iguales: {segundo == penultimo}");
+    }
+
+    // ---------- 10 ----------
+    static void Ej10()
+    {
+        int a = ReadInt("Leer primer entero: ");
+        int b = ReadInt("Leer segundo entero: ");
+
+        int diff = Math.Abs(a - b);
+        Console.WriteLine($"Diferencia: {diff}");
+
+        if (diff <= 10)
+        {
+            int menor = Math.Min(a, b);
+            int mayor = Math.Max(a, b);
+
+            Console.WriteLine($"Enteros entre {menor} y {mayor}:");
+            for (int i = menor; i <= mayor; i++)
+                Console.Write(i + (i < mayor ? ", " : ""));
+            Console.WriteLine();
+        }
+        else
+        {
+            Console.WriteLine("La diferencia es mayor que 10. No se listan numeros.");
+        }
+    }
+}
