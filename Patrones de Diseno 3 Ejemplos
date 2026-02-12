@@ -1,0 +1,111 @@
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Patrón Singleton
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+public sealed class Configuracion
+{
+    private static readonly Configuracion instancia = new Configuracion();
+
+    public static Configuracion Instancia
+    {
+        get { return instancia; }
+    }
+
+    public string Entorno { get; private set; }
+
+    private Configuracion()
+    {
+        Entorno = "Producción";
+    }
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Patrón Factory Method
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+public interface INotificacion
+{
+    void Enviar(string mensaje);
+}
+
+public class NotificacionEmail : INotificacion
+{
+    public void Enviar(string mensaje)
+    {
+        Console.WriteLine("Email: " + mensaje);
+    }
+}
+
+public class NotificacionSMS : INotificacion
+{
+    public void Enviar(string mensaje)
+    {
+        Console.WriteLine("SMS: " + mensaje);
+    }
+}
+
+public class FabricaNotificacion
+{
+    public static INotificacion CrearNotificacion(string tipo)
+    {
+        if (tipo == "email")
+            return new NotificacionEmail();
+        else if (tipo == "sms")
+            return new NotificacionSMS();
+        else
+            throw new ArgumentException("Tipo no válido");
+    }
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Patrón Strategy
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+public interface IEstrategiaDescuento
+{
+    decimal AplicarDescuento(decimal total);
+}
+
+public class SinDescuento : IEstrategiaDescuento
+{
+    public decimal AplicarDescuento(decimal total)
+    {
+        return total;
+    }
+}
+
+public class DescuentoPorcentaje : IEstrategiaDescuento
+{
+    private decimal porcentaje;
+
+    public DescuentoPorcentaje(decimal porcentaje)
+    {
+        this.porcentaje = porcentaje;
+    }
+
+    public decimal AplicarDescuento(decimal total)
+    {
+        return total - (total * porcentaje);
+    }
+}
+
+public class Compra
+{
+    private IEstrategiaDescuento estrategia;
+
+    public Compra(IEstrategiaDescuento estrategia)
+    {
+        this.estrategia = estrategia;
+    }
+
+    public void CambiarEstrategia(IEstrategiaDescuento nuevaEstrategia)
+    {
+        estrategia = nuevaEstrategia;
+    }
+
+    public decimal CalcularTotal(decimal total)
+    {
+        return estrategia.AplicarDescuento(total);
+    }
+}
+
