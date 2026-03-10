@@ -1,3 +1,5 @@
+-------------------------------------------------------------------------------------------------------------------------------------------
+
 Motor.java
 public class Motor {
     private int litros_de_aceite;
@@ -22,5 +24,143 @@ public class Motor {
 
     public void setPotencia(int potencia) {
         this.potencia = potencia;
+    }
+}
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+Coche.java
+public class Coche {
+    private Motor motor;
+    private String marca;
+    private String modelo;
+    private double precioAverias;
+
+    public Coche(String marca, String modelo) {
+        this.marca = marca;
+        this.modelo = modelo;
+        this.motor = new Motor(100);
+        this.precioAverias = 0;
+    }
+
+    public Motor getMotor() {
+        return motor;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public double getPrecioAverias() {
+        return precioAverias;
+    }
+
+    public void acumularAveria(double importe) {
+        this.precioAverias += importe;
+    }
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+Garaje.java
+public class Garaje {
+    private Coche coche;
+    private String averiaAsociada;
+    private int cochesAtendidos;
+
+    public Garaje() {
+        this.coche = null;
+        this.averiaAsociada = "";
+        this.cochesAtendidos = 0;
+    }
+
+    public Coche getCoche() {
+        return coche;
+    }
+
+    public String getAveriaAsociada() {
+        return averiaAsociada;
+    }
+
+    public int getCochesAtendidos() {
+        return cochesAtendidos;
+    }
+
+    public boolean aceptarCoche(Coche coche, String averiaAsociada) {
+        if (this.coche != null) {
+            return false;
+        }
+
+        this.coche = coche;
+        this.averiaAsociada = averiaAsociada;
+        this.cochesAtendidos++;
+        return true;
+    }
+
+    public void devolverCoche() {
+        this.coche = null;
+        this.averiaAsociada = "";
+    }
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+PracticaPOO.java
+public class PracticaPOO {
+    public static void main(String[] args) {
+        Garaje garaje = new Garaje();
+
+        Coche coche1 = new Coche("Toyota", "Corolla");
+        Coche coche2 = new Coche("Honda", "Civic");
+
+        String[] averias = {"aceite", "frenos", "bateria", "motor"};
+
+        for (int i = 0; i < 2; i++) {
+            atenderCoche(garaje, coche1, averias[(int) (Math.random() * averias.length)]);
+            atenderCoche(garaje, coche2, averias[(int) (Math.random() * averias.length)]);
+        }
+
+        System.out.println("===== INFORMACION FINAL =====");
+        mostrarInfoCoche(coche1);
+        System.out.println();
+        mostrarInfoCoche(coche2);
+        System.out.println();
+        System.out.println("Total de coches atendidos en el garaje: " + garaje.getCochesAtendidos());
+    }
+
+    public static void atenderCoche(Garaje garaje, Coche coche, String averia) {
+        boolean aceptado = garaje.aceptarCoche(coche, averia);
+
+        if (aceptado) {
+            double importe = Math.random() * 10000;
+            coche.acumularAveria(importe);
+
+            if (averia.equalsIgnoreCase("aceite")) {
+                int aceiteActual = coche.getMotor().getLitros_de_aceite();
+                coche.getMotor().setLitros_de_aceite(aceiteActual + 10);
+            }
+
+            System.out.println("Coche atendido: " + coche.getMarca() + " " + coche.getModelo());
+            System.out.println("Averia: " + averia);
+            System.out.println("Importe generado: RD$ " + String.format("%.2f", importe));
+            System.out.println("-----------------------------------");
+
+            garaje.devolverCoche();
+        } else {
+            System.out.println("El garaje esta ocupado. No se pudo atender el coche.");
+        }
+    }
+
+    public static void mostrarInfoCoche(Coche coche) {
+        System.out.println("Marca: " + coche.getMarca());
+        System.out.println("Modelo: " + coche.getModelo());
+        System.out.println("Potencia del motor: " + coche.getMotor().getPotencia());
+        System.out.println("Litros de aceite: " + coche.getMotor().getLitros_de_aceite());
+        System.out.println("Precio acumulado de averias: RD$ " + String.format("%.2f", coche.getPrecioAverias()));
     }
 }
