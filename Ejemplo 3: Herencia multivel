@@ -1,0 +1,50 @@
+Ejemplo 3: Herencia multivel
+Caso de uso: Personas en una universidad
+
+class Persona {
+    String nombre;
+
+    public Persona(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void mostrarNombre() {
+        System.out.println("Nombre: " + nombre);
+    }
+}
+
+class Estudiante extends Persona {
+    String matricula;
+
+    public Estudiante(String nombre, String matricula) {
+        super(nombre);
+        this.matricula = matricula;
+    }
+
+    public void mostrarMatricula() {
+        System.out.println("Matrícula: " + matricula);
+    }
+}
+
+class EstudianteBecado extends Estudiante {
+    double beca;
+
+    public EstudianteBecado(String nombre, String matricula, double beca) {
+        super(nombre, matricula);
+        this.beca = beca;
+    }
+
+    public void mostrarBeca() {
+        System.out.println("Beca: " + beca);
+    }
+}
+
+public class Ejemplo3 {
+    public static void main(String[] args) {
+        EstudianteBecado estudiante = new EstudianteBecado("Ana", "2026-001", 15000);
+
+        estudiante.mostrarNombre();
+        estudiante.mostrarMatricula();
+        estudiante.mostrarBeca();
+    }
+}
