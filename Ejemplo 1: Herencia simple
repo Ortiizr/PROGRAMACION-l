@@ -1,0 +1,33 @@
+Ejemplo 1: Herencia simple
+Caso de uso: Animales
+
+class Animal {
+    String nombre;
+
+    public Animal(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void hacerSonido() {
+        System.out.println("El animal hace un sonido.");
+    }
+}
+
+class Perro extends Animal {
+
+    public Perro(String nombre) {
+        super(nombre);
+    }
+
+    public void ladrar() {
+        System.out.println(nombre + " está ladrando.");
+    }
+}
+
+public class Ejemplo1 {
+    public static void main(String[] args) {
+        Perro perro = new Perro("Rocky");
+        perro.hacerSonido();
+        perro.ladrar();
+    }
+}
