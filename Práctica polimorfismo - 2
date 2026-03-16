@@ -1,0 +1,142 @@
+Práctica polimorfismo - 2
+
+using System;
+using System.Collections.Generic;
+
+public class Ave
+{
+    public string Nombre { get; set; }
+    public int Edad { get; set; }
+
+    public Ave(string nombre, int edad)
+    {
+        Nombre = nombre;
+        Edad = edad;
+    }
+
+    public virtual void Volar()
+    {
+        Console.WriteLine("El ave está volando.");
+    }
+
+    public virtual void Comer()
+    {
+        Console.WriteLine("El ave está comiendo.");
+    }
+
+    public virtual void HacerSonido()
+    {
+        Console.WriteLine("El ave hace un sonido.");
+    }
+
+    public virtual void MostrarInformacion()
+    {
+        Console.WriteLine("Nombre: " + Nombre);
+        Console.WriteLine("Edad: " + Edad + " años");
+    }
+}
+
+public class Aguila : Ave
+{
+    public Aguila(string nombre, int edad) : base(nombre, edad)
+    {
+    }
+
+    public override void Volar()
+    {
+        Console.WriteLine("El águila vuela a gran altura.");
+    }
+
+    public override void Comer()
+    {
+        Console.WriteLine("El águila come carne.");
+    }
+
+    public override void HacerSonido()
+    {
+        Console.WriteLine("El águila emite un chillido.");
+    }
+
+    public override void MostrarInformacion()
+    {
+        Console.WriteLine("=== ÁGUILA ===");
+        base.MostrarInformacion();
+    }
+}
+
+public class Loro : Ave
+{
+    public Loro(string nombre, int edad) : base(nombre, edad)
+    {
+    }
+
+    public override void Volar()
+    {
+        Console.WriteLine("El loro vuela de rama en rama.");
+    }
+
+    public override void Comer()
+    {
+        Console.WriteLine("El loro come semillas y frutas.");
+    }
+
+    public override void HacerSonido()
+    {
+        Console.WriteLine("El loro dice: Hola, hola!");
+    }
+
+    public override void MostrarInformacion()
+    {
+        Console.WriteLine("=== LORO ===");
+        base.MostrarInformacion();
+    }
+}
+
+public class Pinguino : Ave
+{
+    public Pinguino(string nombre, int edad) : base(nombre, edad)
+    {
+    }
+
+    public override void Volar()
+    {
+        Console.WriteLine("El pingüino no puede volar, pero nada muy bien.");
+    }
+
+    public override void Comer()
+    {
+        Console.WriteLine("El pingüino come peces.");
+    }
+
+    public override void HacerSonido()
+    {
+        Console.WriteLine("El pingüino hace sonidos suaves.");
+    }
+
+    public override void MostrarInformacion()
+    {
+        Console.WriteLine("=== PINGÜINO ===");
+        base.MostrarInformacion();
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        List<Ave> aves = new List<Ave>();
+
+        aves.Add(new Aguila("Águila Real", 5));
+        aves.Add(new Loro("Loro Verde", 2));
+        aves.Add(new Pinguino("Pingüino Emperador", 4));
+
+        foreach (Ave ave in aves)
+        {
+            ave.MostrarInformacion();
+            ave.Volar();
+            ave.Comer();
+            ave.HacerSonido();
+            Console.WriteLine();
+        }
+    }
+}
