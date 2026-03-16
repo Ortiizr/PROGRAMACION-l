@@ -1,0 +1,49 @@
+Ejemplo 5: Herencia en sistema bancario
+Caso de uso: Tipos de cuentas
+
+class CuentaBancaria {
+    protected double saldo;
+
+    public CuentaBancaria(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public void mostrarSaldo() {
+        System.out.println("Saldo actual: " + saldo);
+    }
+}
+
+class CuentaAhorro extends CuentaBancaria {
+    public CuentaAhorro(double saldo) {
+        super(saldo);
+    }
+
+    public void generarInteres() {
+        saldo += saldo * 0.05;
+        System.out.println("Interés aplicado a cuenta de ahorro.");
+    }
+}
+
+class CuentaCorriente extends CuentaBancaria {
+    public CuentaCorriente(double saldo) {
+        super(saldo);
+    }
+
+    public void cobrarMantenimiento() {
+        saldo -= 100;
+        System.out.println("Cargo por mantenimiento aplicado.");
+    }
+}
+
+public class Ejemplo5 {
+    public static void main(String[] args) {
+        CuentaAhorro ahorro = new CuentaAhorro(5000);
+        CuentaCorriente corriente = new CuentaCorriente(5000);
+
+        ahorro.generarInteres();
+        ahorro.mostrarSaldo();
+
+        corriente.cobrarMantenimiento();
+        corriente.mostrarSaldo();
+    }
+}
