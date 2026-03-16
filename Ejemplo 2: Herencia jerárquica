@@ -1,0 +1,47 @@
+Ejemplo 2: Herencia jerárquica
+Caso de uso: Vehículos
+
+class Vehiculo {
+    String marca;
+
+    public Vehiculo(String marca) {
+        this.marca = marca;
+    }
+
+    public void mostrarMarca() {
+        System.out.println("Marca: " + marca);
+    }
+}
+
+class Carro extends Vehiculo {
+    public Carro(String marca) {
+        super(marca);
+    }
+
+    public void conducir() {
+        System.out.println("El carro está en marcha.");
+    }
+}
+
+class Moto extends Vehiculo {
+    public Moto(String marca) {
+        super(marca);
+    }
+
+    public void acelerar() {
+        System.out.println("La moto está acelerando.");
+    }
+}
+
+public class Ejemplo2 {
+    public static void main(String[] args) {
+        Carro carro = new Carro("Toyota");
+        Moto moto = new Moto("Yamaha");
+
+        carro.mostrarMarca();
+        carro.conducir();
+
+        moto.mostrarMarca();
+        moto.acelerar();
+    }
+}
