@@ -1,0 +1,32 @@
+Ejemplo 4: Herencia con sobrescritura de métodos
+Caso de uso: Empleados
+
+class Empleado {
+    public void trabajar() {
+        System.out.println("El empleado está trabajando.");
+    }
+}
+
+class Programador extends Empleado {
+    @Override
+    public void trabajar() {
+        System.out.println("El programador está desarrollando software.");
+    }
+}
+
+class Diseñador extends Empleado {
+    @Override
+    public void trabajar() {
+        System.out.println("El diseñador está creando interfaces.");
+    }
+}
+
+public class Ejemplo4 {
+    public static void main(String[] args) {
+        Empleado emp1 = new Programador();
+        Empleado emp2 = new Diseñador();
+
+        emp1.trabajar();
+        emp2.trabajar();
+    }
+}
