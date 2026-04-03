@@ -1,3 +1,21 @@
+____Diagrama UML de clases____
+
+
+SistemaGestionFutbol/
+│
+├── Models/
+│   ├── Liga.cs
+│   ├── Equipo.cs
+│   ├── Partido.cs
+│   ├── Jugador.cs
+│   └── LineUp.cs
+│
+├── Services/
+│   └── ServicioApiFutbol.cs
+│
+└── Program.cs
+
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
