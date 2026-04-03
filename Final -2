@@ -1,1 +1,355 @@
-test001
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace SistemaGestionFutbolAvanzado
+{
+    public class Liga
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string Pais { get; set; }
+
+        public Liga(int id, string nombre, string pais)
+        {
+            Id = id;
+            Nombre = nombre;
+            Pais = pais;
+        }
+
+        public override string ToString()
+        {
+            return $"{Id} - {Nombre} ({Pais})";
+        }
+    }
+
+    public class Equipo
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string Liga { get; set; }
+
+        public Equipo(int id, string nombre, string liga)
+        {
+            Id = id;
+            Nombre = nombre;
+            Liga = liga;
+        }
+
+        public override string ToString()
+        {
+            return $"{Id} - {Nombre} | Liga: {Liga}";
+        }
+    }
+
+    public class Jugador
+    {
+        public string Nombre { get; set; }
+        public string Posicion { get; set; }
+
+        public Jugador(string nombre, string posicion)
+        {
+            Nombre = nombre;
+            Posicion = posicion;
+        }
+
+        public override string ToString()
+        {
+            return $"{Nombre} - {Posicion}";
+        }
+    }
+
+    public class LineUp
+    {
+        public List<Jugador> Titulares { get; set; }
+        public List<Jugador> Suplentes { get; set; }
+
+        public LineUp()
+        {
+            Titulares = new List<Jugador>();
+            Suplentes = new List<Jugador>();
+        }
+    }
+
+    public class Partido
+    {
+        public int Id { get; set; }
+        public string Competicion { get; set; }
+        public DateTime Fecha { get; set; }
+        public string EquipoLocal { get; set; }
+        public string EquipoVisitante { get; set; }
+        public int GolesLocal { get; set; }
+        public int GolesVisitante { get; set; }
+        public LineUp LineUpLocal { get; set; }
+        public LineUp LineUpVisitante { get; set; }
+
+        public Partido(int id, string competicion, DateTime fecha, string local, string visitante, int golesLocal, int golesVisitante)
+        {
+            Id = id;
+            Competicion = competicion;
+            Fecha = fecha;
+            EquipoLocal = local;
+            EquipoVisitante = visitante;
+            GolesLocal = golesLocal;
+            GolesVisitante = golesVisitante;
+            LineUpLocal = new LineUp();
+            LineUpVisitante = new LineUp();
+        }
+
+        public string MostrarResultado()
+        {
+            return $"{Fecha:dd/MM/yyyy} | {Competicion} | {EquipoLocal} {GolesLocal} - {GolesVisitante} {EquipoVisitante}";
+        }
+    }
+
+    public class ServicioApiFutbol
+    {
+        // Aquí luego conectarías una API real.
+        // Por ahora dejamos datos simulados para que el proyecto funcione.
+
+        private List<Liga> ligas = new List<Liga>
+        {
+            new Liga(1, "Premier League", "Inglaterra"),
+            new Liga(2, "LaLiga", "España"),
+            new Liga(3, "Bundesliga", "Alemania"),
+            new Liga(4, "Serie A", "Italia"),
+            new Liga(5, "Ligue 1", "Francia")
+        };
+
+        private List<Equipo> equipos = new List<Equipo>
+        {
+            new Equipo(101, "Manchester City", "Premier League"),
+            new Equipo(102, "Liverpool", "Premier League"),
+            new Equipo(201, "Real Madrid", "LaLiga"),
+            new Equipo(202, "FC Barcelona", "LaLiga"),
+            new Equipo(301, "Bayern Munich", "Bundesliga"),
+            new Equipo(401, "Juventus", "Serie A"),
+            new Equipo(501, "PSG", "Ligue 1")
+        };
+
+        public List<Liga> ObtenerLigas()
+        {
+            return ligas;
+        }
+
+        public List<Liga> BuscarLigaPorNombre(string nombre)
+        {
+            return ligas
+                .Where(l => l.Nombre.ToLower().Contains(nombre.ToLower()))
+                .ToList();
+        }
+
+        public List<Equipo> BuscarEquipoPorNombre(string nombre)
+        {
+            return equipos
+                .Where(e => e.Nombre.ToLower().Contains(nombre.ToLower()))
+                .ToList();
+        }
+
+        public List<Partido> ObtenerUltimos3Partidos(int equipoId)
+        {
+            // Simulación de respuesta
+            if (equipoId == 101) // Manchester City
+            {
+                var p1 = new Partido(1, "UEFA Champions League", DateTime.Now.AddDays(-2), "Manchester City", "Real Madrid", 2, 1);
+                var p2 = new Partido(2, "Premier League", DateTime.Now.AddDays(-6), "Liverpool", "Manchester City", 1, 1);
+                var p3 = new Partido(3, "FA Cup", DateTime.Now.AddDays(-10), "Manchester City", "Chelsea", 3, 0);
+
+                CargarLineUpEjemplo(p1);
+                CargarLineUpEjemplo(p2);
+                CargarLineUpEjemplo(p3);
+
+                return new List<Partido> { p1, p2, p3 };
+            }
+
+            if (equipoId == 201) // Real Madrid
+            {
+                var p1 = new Partido(4, "UEFA Champions League", DateTime.Now.AddDays(-2), "Manchester City", "Real Madrid", 2, 1);
+                var p2 = new Partido(5, "LaLiga", DateTime.Now.AddDays(-5), "Real Madrid", "Sevilla", 2, 0);
+                var p3 = new Partido(6, "Copa del Rey", DateTime.Now.AddDays(-9), "Valencia", "Real Madrid", 1, 3);
+
+                CargarLineUpEjemplo(p1);
+                CargarLineUpEjemplo(p2);
+                CargarLineUpEjemplo(p3);
+
+                return new List<Partido> { p1, p2, p3 };
+            }
+
+            return new List<Partido>();
+        }
+
+        private void CargarLineUpEjemplo(Partido partido)
+        {
+            partido.LineUpLocal.Titulares.Add(new Jugador("Jugador 1", "Portero"));
+            partido.LineUpLocal.Titulares.Add(new Jugador("Jugador 2", "Defensa"));
+            partido.LineUpLocal.Titulares.Add(new Jugador("Jugador 3", "Defensa"));
+            partido.LineUpLocal.Titulares.Add(new Jugador("Jugador 4", "Mediocampo"));
+            partido.LineUpLocal.Titulares.Add(new Jugador("Jugador 5", "Delantero"));
+
+            partido.LineUpVisitante.Titulares.Add(new Jugador("Jugador A", "Portero"));
+            partido.LineUpVisitante.Titulares.Add(new Jugador("Jugador B", "Defensa"));
+            partido.LineUpVisitante.Titulares.Add(new Jugador("Jugador C", "Defensa"));
+            partido.LineUpVisitante.Titulares.Add(new Jugador("Jugador D", "Mediocampo"));
+            partido.LineUpVisitante.Titulares.Add(new Jugador("Jugador E", "Delantero"));
+
+            partido.LineUpLocal.Suplentes.Add(new Jugador("Suplente 1", "Delantero"));
+            partido.LineUpVisitante.Suplentes.Add(new Jugador("Suplente A", "Mediocampo"));
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            ServicioApiFutbol servicio = new ServicioApiFutbol();
+            bool salir = false;
+
+            while (!salir)
+            {
+                Console.WriteLine("\n=== SISTEMA DE GESTIÓN DE FÚTBOL ===");
+                Console.WriteLine("1. Ver todas las ligas");
+                Console.WriteLine("2. Buscar liga");
+                Console.WriteLine("3. Buscar equipo favorito");
+                Console.WriteLine("4. Salir");
+                Console.Write("Seleccione una opción: ");
+
+                string opcion = Console.ReadLine();
+
+                switch (opcion)
+                {
+                    case "1":
+                        MostrarLigas(servicio);
+                        break;
+
+                    case "2":
+                        BuscarLiga(servicio);
+                        break;
+
+                    case "3":
+                        BuscarEquipoYMostrarPartidos(servicio);
+                        break;
+
+                    case "4":
+                        salir = true;
+                        break;
+
+                    default:
+                        Console.WriteLine("Opción no válida.");
+                        break;
+                }
+            }
+        }
+
+        static void MostrarLigas(ServicioApiFutbol servicio)
+        {
+            var ligas = servicio.ObtenerLigas();
+
+            Console.WriteLine("\n=== LIGAS DISPONIBLES ===");
+            foreach (var liga in ligas)
+            {
+                Console.WriteLine(liga);
+            }
+        }
+
+        static void BuscarLiga(ServicioApiFutbol servicio)
+        {
+            Console.Write("\nIngrese el nombre de la liga: ");
+            string nombre = Console.ReadLine();
+
+            var resultados = servicio.BuscarLigaPorNombre(nombre);
+
+            if (resultados.Count == 0)
+            {
+                Console.WriteLine("No se encontraron ligas.");
+                return;
+            }
+
+            Console.WriteLine("\n=== RESULTADOS DE LIGAS ===");
+            foreach (var liga in resultados)
+            {
+                Console.WriteLine(liga);
+            }
+        }
+
+        static void BuscarEquipoYMostrarPartidos(ServicioApiFutbol servicio)
+        {
+            Console.Write("\nIngrese el nombre del equipo: ");
+            string nombre = Console.ReadLine();
+
+            var equipos = servicio.BuscarEquipoPorNombre(nombre);
+
+            if (equipos.Count == 0)
+            {
+                Console.WriteLine("No se encontró el equipo.");
+                return;
+            }
+
+            Console.WriteLine("\n=== EQUIPOS ENCONTRADOS ===");
+            foreach (var equipo in equipos)
+            {
+                Console.WriteLine(equipo);
+            }
+
+            Console.Write("\nIngrese el ID del equipo que desea consultar: ");
+            if (!int.TryParse(Console.ReadLine(), out int equipoId))
+            {
+                Console.WriteLine("ID inválido.");
+                return;
+            }
+
+            var partidos = servicio.ObtenerUltimos3Partidos(equipoId);
+
+            if (partidos.Count == 0)
+            {
+                Console.WriteLine("No hay partidos disponibles para este equipo.");
+                return;
+            }
+
+            Console.WriteLine("\n=== ÚLTIMOS 3 PARTIDOS ===");
+            for (int i = 0; i < partidos.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {partidos[i].MostrarResultado()}");
+            }
+
+            Console.Write("\nSeleccione el número del partido para ver lineups: ");
+            if (!int.TryParse(Console.ReadLine(), out int seleccion) || seleccion < 1 || seleccion > partidos.Count)
+            {
+                Console.WriteLine("Selección inválida.");
+                return;
+            }
+
+            var partido = partidos[seleccion - 1];
+            MostrarLineUp(partido);
+        }
+
+        static void MostrarLineUp(Partido partido)
+        {
+            Console.WriteLine("\n=== RESULTADO DEL PARTIDO ===");
+            Console.WriteLine(partido.MostrarResultado());
+
+            Console.WriteLine($"\n--- Titulares de {partido.EquipoLocal} ---");
+            foreach (var jugador in partido.LineUpLocal.Titulares)
+            {
+                Console.WriteLine(jugador);
+            }
+
+            Console.WriteLine($"\n--- Suplentes de {partido.EquipoLocal} ---");
+            foreach (var jugador in partido.LineUpLocal.Suplentes)
+            {
+                Console.WriteLine(jugador);
+            }
+
+            Console.WriteLine($"\n--- Titulares de {partido.EquipoVisitante} ---");
+            foreach (var jugador in partido.LineUpVisitante.Titulares)
+            {
+                Console.WriteLine(jugador);
+            }
+
+            Console.WriteLine($"\n--- Suplentes de {partido.EquipoVisitante} ---");
+            foreach (var jugador in partido.LineUpVisitante.Suplentes)
+            {
+                Console.WriteLine(jugador);
+            }
+        }
+    }
+}
