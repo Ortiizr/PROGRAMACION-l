@@ -46,9 +46,13 @@ function App() {
 
   const cambiarDispositivo = (evento) => {
     setDispositivo(evento.target.value);
-
-    // Limpia la marca cuando cambia el dispositivo.
     setMarca("");
+    setEstado("");
+  };
+
+  const cambiarMarca = (evento) => {
+    setMarca(evento.target.value);
+    setEstado("");
   };
 
   return (
@@ -67,7 +71,7 @@ function App() {
 
             <img
               src="/servidor.jpg"
-              alt="Imagen cargada desde public"
+              alt="Servidor cargado desde public"
             />
 
             <p>public/servidor.jpg</p>
@@ -78,7 +82,7 @@ function App() {
 
             <img
               src={laptopImagen}
-              alt="Laptop cargada desde src"
+              alt="Laptops cargadas desde src"
             />
 
             <p>src/assets/laptops.webp</p>
@@ -137,9 +141,7 @@ function App() {
             <select
               id="marca"
               value={marca}
-              onChange={(evento) =>
-                setMarca(evento.target.value)
-              }
+              onChange={cambiarMarca}
               disabled={!dispositivo}
             >
               <option value="">
@@ -170,9 +172,12 @@ function App() {
               onChange={(evento) =>
                 setEstado(evento.target.value)
               }
+              disabled={!marca}
             >
               <option value="">
-                -- Selecciona un estado --
+                {marca
+                  ? "-- Selecciona un estado --"
+                  : "-- Primero selecciona una marca --"}
               </option>
 
               <option value="Disponible">
