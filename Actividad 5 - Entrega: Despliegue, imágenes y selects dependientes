@@ -1,1 +1,223 @@
+import { useState } from "react";
+import laptopImagen from "./assets/laptops.webp";
+import "./App.css";
 
+const marcasPorDispositivo = {
+  Laptop: ["Dell", "HP", "Lenovo", "Apple", "Asus"],
+
+  "Computadora de escritorio": [
+    "Dell",
+    "HP",
+    "Lenovo",
+    "Acer",
+  ],
+
+  Monitor: [
+    "Samsung",
+    "LG",
+    "Dell",
+    "AOC",
+  ],
+
+  Impresora: [
+    "HP",
+    "Epson",
+    "Canon",
+    "Brother",
+  ],
+
+  Router: [
+    "Cisco",
+    "Ubiquiti",
+    "TP-Link",
+    "MikroTik",
+  ],
+};
+
+function App() {
+  const [codigo, setCodigo] = useState("");
+  const [dispositivo, setDispositivo] = useState("");
+  const [marca, setMarca] = useState("");
+  const [estado, setEstado] = useState("");
+
+  const marcasDisponibles = dispositivo
+    ? marcasPorDispositivo[dispositivo]
+    : [];
+
+  const cambiarDispositivo = (evento) => {
+    setDispositivo(evento.target.value);
+
+    // Limpia la marca cuando cambia el dispositivo.
+    setMarca("");
+  };
+
+  return (
+    <main className="contenedor">
+      <section className="tarjeta">
+        <h1>Inventario de Activos Tecnológicos</h1>
+
+        <p className="descripcion">
+          Registro básico de equipos con imágenes desde public y src,
+          y un select dependiente.
+        </p>
+
+        <div className="imagenes">
+          <div className="imagen-contenedor">
+            <h2>Imagen desde public</h2>
+
+            <img
+              src="/servidor.jpg"
+              alt="Imagen cargada desde public"
+            />
+
+            <p>public/servidor.jpg</p>
+          </div>
+
+          <div className="imagen-contenedor">
+            <h2>Imagen desde src</h2>
+
+            <img
+              src={laptopImagen}
+              alt="Laptop cargada desde src"
+            />
+
+            <p>src/assets/laptops.webp</p>
+          </div>
+        </div>
+
+        <div className="formulario">
+          <div className="campo">
+            <label htmlFor="codigo">
+              Código del activo
+            </label>
+
+            <input
+              id="codigo"
+              type="text"
+              placeholder="Ejemplo: ACT-001"
+              value={codigo}
+              onChange={(evento) =>
+                setCodigo(evento.target.value)
+              }
+            />
+          </div>
+
+          <div className="campo">
+            <label htmlFor="dispositivo">
+              Tipo de dispositivo
+            </label>
+
+            <select
+              id="dispositivo"
+              value={dispositivo}
+              onChange={cambiarDispositivo}
+            >
+              <option value="">
+                -- Selecciona un dispositivo --
+              </option>
+
+              {Object.keys(marcasPorDispositivo).map(
+                (tipoDispositivo) => (
+                  <option
+                    key={tipoDispositivo}
+                    value={tipoDispositivo}
+                  >
+                    {tipoDispositivo}
+                  </option>
+                )
+              )}
+            </select>
+          </div>
+
+          <div className="campo">
+            <label htmlFor="marca">
+              Marca
+            </label>
+
+            <select
+              id="marca"
+              value={marca}
+              onChange={(evento) =>
+                setMarca(evento.target.value)
+              }
+              disabled={!dispositivo}
+            >
+              <option value="">
+                {dispositivo
+                  ? "-- Selecciona una marca --"
+                  : "-- Primero selecciona un dispositivo --"}
+              </option>
+
+              {marcasDisponibles.map((nombreMarca) => (
+                <option
+                  key={nombreMarca}
+                  value={nombreMarca}
+                >
+                  {nombreMarca}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="campo">
+            <label htmlFor="estado">
+              Estado del equipo
+            </label>
+
+            <select
+              id="estado"
+              value={estado}
+              onChange={(evento) =>
+                setEstado(evento.target.value)
+              }
+            >
+              <option value="">
+                -- Selecciona un estado --
+              </option>
+
+              <option value="Disponible">
+                Disponible
+              </option>
+
+              <option value="Asignado">
+                Asignado
+              </option>
+
+              <option value="En mantenimiento">
+                En mantenimiento
+              </option>
+
+              <option value="Fuera de servicio">
+                Fuera de servicio
+              </option>
+            </select>
+          </div>
+        </div>
+
+        {codigo && dispositivo && marca && estado && (
+          <div className="resultado">
+            <h2>Activo registrado</h2>
+
+            <p>
+              Código: <strong>{codigo}</strong>
+            </p>
+
+            <p>
+              Dispositivo: <strong>{dispositivo}</strong>
+            </p>
+
+            <p>
+              Marca: <strong>{marca}</strong>
+            </p>
+
+            <p>
+              Estado: <strong>{estado}</strong>
+            </p>
+          </div>
+        )}
+      </section>
+    </main>
+  );
+}
+
+export default App;
