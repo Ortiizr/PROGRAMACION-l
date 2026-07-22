@@ -1,228 +1,318 @@
-import { useState } from "react";
-import laptopImagen from "./assets/laptops.webp";
-import "./App.css";
-
-const marcasPorDispositivo = {
-  Laptop: ["Dell", "HP", "Lenovo", "Apple", "Asus"],
-
-  "Computadora de escritorio": [
-    "Dell",
-    "HP",
-    "Lenovo",
-    "Acer",
-  ],
-
-  Monitor: [
-    "Samsung",
-    "LG",
-    "Dell",
-    "AOC",
-  ],
-
-  Impresora: [
-    "HP",
-    "Epson",
-    "Canon",
-    "Brother",
-  ],
-
-  Router: [
-    "Cisco",
-    "Ubiquiti",
-    "TP-Link",
-    "MikroTik",
-  ],
-};
-
-function App() {
-  const [codigo, setCodigo] = useState("");
-  const [dispositivo, setDispositivo] = useState("");
-  const [marca, setMarca] = useState("");
-  const [estado, setEstado] = useState("");
-
-  const marcasDisponibles = dispositivo
-    ? marcasPorDispositivo[dispositivo]
-    : [];
-
-  const cambiarDispositivo = (evento) => {
-    setDispositivo(evento.target.value);
-    setMarca("");
-    setEstado("");
-  };
-
-  const cambiarMarca = (evento) => {
-    setMarca(evento.target.value);
-    setEstado("");
-  };
-
-  return (
-    <main className="contenedor">
-      <section className="tarjeta">
-        <h1>Inventario de Activos Tecnológicos</h1>
-
-        <p className="descripcion">
-          Registro básico de equipos con imágenes desde public y src,
-          y un select dependiente.
-        </p>
-
-        <div className="imagenes">
-          <div className="imagen-contenedor">
-            <h2>Imagen desde public</h2>
-
-            <img
-              src="/servidor.jpg"
-              alt="Servidor cargado desde public"
-            />
-
-            <p>public/servidor.jpg</p>
-          </div>
-
-          <div className="imagen-contenedor">
-            <h2>Imagen desde src</h2>
-
-            <img
-              src={laptopImagen}
-              alt="Laptops cargadas desde src"
-            />
-
-            <p>src/assets/laptops.webp</p>
-          </div>
-        </div>
-
-        <div className="formulario">
-          <div className="campo">
-            <label htmlFor="codigo">
-              Código del activo
-            </label>
-
-            <input
-              id="codigo"
-              type="text"
-              placeholder="Ejemplo: ACT-001"
-              value={codigo}
-              onChange={(evento) =>
-                setCodigo(evento.target.value)
-              }
-            />
-          </div>
-
-          <div className="campo">
-            <label htmlFor="dispositivo">
-              Tipo de dispositivo
-            </label>
-
-            <select
-              id="dispositivo"
-              value={dispositivo}
-              onChange={cambiarDispositivo}
-            >
-              <option value="">
-                -- Selecciona un dispositivo --
-              </option>
-
-              {Object.keys(marcasPorDispositivo).map(
-                (tipoDispositivo) => (
-                  <option
-                    key={tipoDispositivo}
-                    value={tipoDispositivo}
-                  >
-                    {tipoDispositivo}
-                  </option>
-                )
-              )}
-            </select>
-          </div>
-
-          <div className="campo">
-            <label htmlFor="marca">
-              Marca
-            </label>
-
-            <select
-              id="marca"
-              value={marca}
-              onChange={cambiarMarca}
-              disabled={!dispositivo}
-            >
-              <option value="">
-                {dispositivo
-                  ? "-- Selecciona una marca --"
-                  : "-- Primero selecciona un dispositivo --"}
-              </option>
-
-              {marcasDisponibles.map((nombreMarca) => (
-                <option
-                  key={nombreMarca}
-                  value={nombreMarca}
-                >
-                  {nombreMarca}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="campo">
-            <label htmlFor="estado">
-              Estado del equipo
-            </label>
-
-            <select
-              id="estado"
-              value={estado}
-              onChange={(evento) =>
-                setEstado(evento.target.value)
-              }
-              disabled={!marca}
-            >
-              <option value="">
-                {marca
-                  ? "-- Selecciona un estado --"
-                  : "-- Primero selecciona una marca --"}
-              </option>
-
-              <option value="Disponible">
-                Disponible
-              </option>
-
-              <option value="Asignado">
-                Asignado
-              </option>
-
-              <option value="En mantenimiento">
-                En mantenimiento
-              </option>
-
-              <option value="Fuera de servicio">
-                Fuera de servicio
-              </option>
-            </select>
-          </div>
-        </div>
-
-        {codigo && dispositivo && marca && estado && (
-          <div className="resultado">
-            <h2>Activo registrado</h2>
-
-            <p>
-              Código: <strong>{codigo}</strong>
-            </p>
-
-            <p>
-              Dispositivo: <strong>{dispositivo}</strong>
-            </p>
-
-            <p>
-              Marca: <strong>{marca}</strong>
-            </p>
-
-            <p>
-              Estado: <strong>{estado}</strong>
-            </p>
-          </div>
-        )}
-      </section>
-    </main>
-  );
+#root {
+  width: 100%;
 }
 
-export default App;
+/* INVENTARIO */
+
+.contenedor {
+  width: 100%;
+  min-height: 100vh;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tarjeta {
+  width: 100%;
+  max-width: 850px;
+  padding: 35px;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+}
+
+.barra-superior {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.boton-cerrar {
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  background-color: #b42318;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.boton-cerrar:hover {
+  background-color: #912018;
+}
+
+.tarjeta h1 {
+  margin-bottom: 10px;
+  text-align: center;
+  color: #1d3557;
+  font-size: 42px;
+  line-height: 1.15;
+}
+
+.descripcion {
+  margin-bottom: 30px;
+  text-align: center;
+  color: #5f6b7a;
+  line-height: 1.5;
+}
+
+.imagenes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.imagen-contenedor {
+  padding: 20px;
+  text-align: center;
+  background-color: #f5f7fa;
+  border: 1px solid #dfe5ec;
+  border-radius: 12px;
+}
+
+.imagen-contenedor h2 {
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #1d3557;
+}
+
+.imagen-contenedor img {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  height: 190px;
+  margin: 15px auto;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.imagen-contenedor p {
+  color: #495057;
+}
+
+.formulario {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 30px;
+  width: 100%;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
+.campo label {
+  width: 100%;
+  font-weight: bold;
+  color: #1d3557;
+  text-align: center;
+}
+
+.campo input,
+.campo select {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 46px;
+  padding: 0 12px;
+  margin: 0;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #263238;
+  background-color: white;
+  border: 1px solid #b8c2cc;
+  border-radius: 8px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.campo input:focus,
+.campo select:focus {
+  border-color: #457b9d;
+  box-shadow: 0 0 0 3px rgba(69, 123, 157, 0.15);
+}
+
+.campo input::placeholder {
+  color: #8a94a3;
+}
+
+.campo select:disabled {
+  cursor: not-allowed;
+  color: #7b8794;
+  background-color: #e9ecef;
+}
+
+.resultado {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #e8f5e9;
+  border-left: 5px solid #2e7d32;
+  border-radius: 8px;
+}
+
+.resultado h2 {
+  margin-bottom: 10px;
+  color: #1b5e20;
+}
+
+.resultado p {
+  margin: 5px 0;
+  color: #263238;
+}
+
+.mensaje-exito {
+  margin-bottom: 12px !important;
+  color: #3f5f45 !important;
+}
+
+/* LOGIN */
+
+.login-contenedor {
+  width: 100%;
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #dbeafe, #eef2ff);
+}
+
+.login-tarjeta {
+  width: 100%;
+  max-width: 430px;
+  padding: 40px;
+  text-align: center;
+  background-color: white;
+  border-radius: 18px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.login-icono {
+  margin-bottom: 15px;
+  font-size: 55px;
+}
+
+.login-tarjeta h1 {
+  margin-bottom: 10px;
+  color: #1d3557;
+  font-size: 32px;
+}
+
+.login-tarjeta > p {
+  margin-bottom: 30px;
+  color: #5f6b7a;
+  line-height: 1.5;
+}
+
+.login-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.login-campo label {
+  font-weight: bold;
+  color: #1d3557;
+}
+
+.login-campo input {
+  width: 100%;
+  height: 46px;
+  padding: 0 12px;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #263238;
+  background-color: white;
+  border: 1px solid #b8c2cc;
+  border-radius: 8px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.login-campo input:focus {
+  border-color: #457b9d;
+  box-shadow: 0 0 0 3px rgba(69, 123, 157, 0.15);
+}
+
+.login-campo input::placeholder {
+  color: #8a94a3;
+}
+
+.boton-login {
+  width: 100%;
+  height: 46px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #1d3557;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.boton-login:hover {
+  background-color: #274c77;
+}
+
+.login-error {
+  padding: 10px;
+  color: #b42318;
+  background-color: #fee4e2;
+  border: 1px solid #fecdca;
+  border-radius: 7px;
+}
+
+.credenciales-prueba {
+  margin-top: 25px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: #495057;
+  background-color: #f5f7fa;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* DISEÑO ADAPTABLE */
+
+@media (max-width: 650px) {
+  .imagenes,
+  .formulario {
+    grid-template-columns: 1fr;
+  }
+
+  .tarjeta {
+    padding: 25px 18px;
+  }
+
+  .tarjeta h1 {
+    font-size: 32px;
+  }
+
+  .imagen-contenedor img {
+    height: 170px;
+  }
+
+  .login-tarjeta {
+    padding: 30px 20px;
+  }
+}
